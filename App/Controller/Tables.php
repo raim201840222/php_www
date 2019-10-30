@@ -4,7 +4,7 @@ namespace App\Controller;
         // 생성자
         private $db;
         public function __construct($db){
-            echo __CLASS__;
+            // echo __CLASS__;
             $this->db = $db;
         }
         public function main(){
