@@ -1,11 +1,13 @@
 <?php  
 // 선언
+namespace Module\Database;
+
 class Table{
     public $table_name;
     public $Database;
 
     public function __construct($database){
-        echo "테이블 클래스 생성<br>";
+        //echo "테이블 클래스 생성<br>";
         $this->Database = $database;
     }
     // 테이블 생성
