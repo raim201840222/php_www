@@ -4,8 +4,9 @@
     print_r($config);
     echo "<br>";
 
-    require "../Module/Database/database.php";
-    require "../Module/Database/Table.php";
+    require "../Loading.php";
+    //require "../Module/Database/database.php"; // 1개
+    //require "../Module/Database/Table.php"; // 2개
 
     $db = new Database($config);
     $table = new Table($db);
