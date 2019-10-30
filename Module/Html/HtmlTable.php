@@ -16,6 +16,7 @@ class HtmlTable
         foreach($rows[0] as $key => $value){
             $body .= "<th>".$key."</th>";
         }
+        $body .= "</tr>";
         $body .="</thead>";
         $body .="<tbody>";
         // https://github.com/infohojin/php_www
