@@ -12,7 +12,7 @@ class HtmlTable
         </tr>";
         $body .="</thead>";
         $body .="<tbody>";
-        // https://github.com/chucksan/php_www
+        // https://github.com/infohojin/php_www
         for($i=0;$i<count($rows);$i++){
             $body .="<tr>";
             $body .="<td>$i</td>";
