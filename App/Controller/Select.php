@@ -26,7 +26,10 @@ class Select
         if ($third == "new") {
             // echo "새로운 데이터 입력";
             $this->newInsert($tableName);
-        } else 
+        }else if($third == "delete"){
+            $this->delete($tableName);
+        } 
+        else 
         // 3번째 값이 정수이면: 수정
         // 문자 -> 숫자 (intval)
         // 숫자 -> 정수??? (is_int)
@@ -39,7 +42,21 @@ class Select
             $this->list($tableName);
         }        
     }
-    public function edit($tableName, $id)
+    private function delete($tableName){
+        $fourth = $this->HttpUri->fourth();
+        echo $fourth."삭제합니다.";
+
+        // 삭제쿼리
+        $query = "DELETE FROM ".$tableName;
+
+        $query.= " WHERE id='".$fourth."'";
+        echo $query; // 쿼리 확인 습관
+
+        $result = $this->db->queryExecute($query);
+            
+        header("location:"."/select/".$tableName);// 페이지 이동
+    }
+    private function edit($tableName, $id)
     {
         print_r($_POST);
         if ($_POST) {
@@ -57,7 +74,7 @@ class Select
             // 조건값
             $query .= " WHERE id='".$id."'";
             // echo $query;
-            exit;
+            // exit;
             $result = $this->db->queryExecute($query);
             // 페이지 이동
             header("location:"."/select/".$tableName);
@@ -90,7 +107,8 @@ class Select
             $content .= "<br>";
         }
         
-        $content .= "<input type=\"submit\" value=\"수정\">";
+        $content .= "<input type=\"submit\" value=\"수정\">"; 
+        $content .= "<a href='./delete/".$id."'>삭제</a>";
         $content .= "</form>";
         
         $body = file_get_contents("../Resource/edit.html");
@@ -152,8 +170,24 @@ class Select
     public function list($tableName)
     {        
         if ( $tableName ) {
-            $query = "SELECT * from ".$tableName; // SQL 쿼리문
+
+            // 전체 갯수
+            $query = "SELECT (`id`) from ".$tableName; // SQL 쿼리문
+            echo $query;
+
             $result = $this->db->queryExecute($query);
+            $total = mysqli_num_rows($result);
+
+            echo "전체 갯수 = ". $total;
+
+            $lines = 5;
+            $start = $_GET['start']? $_GET['start']:0;//5
+            $start = $start * $lines;
+
+            $query = "SELECT * from ".$tableName; // SQL 쿼리문
+            $query .= " LIMIT ".$start.",".$lines; // start 부터 lines값 까지 출력
+            $result = $this->db->queryExecute($query);
+
             $content = ""; // 초기화
             $rows = []; // 배열 초기화
             $count = mysqli_num_rows($result);
@@ -162,7 +196,19 @@ class Select
                 for ($i=0;$i<$count;$i++) {
                     $row = mysqli_fetch_object($result);
                     // print_r($row);
-                    $rows []= $row; // 배열 추가 (2차원 배열)
+                    // $rows []= $row; // 배열 추가 (2차원 배열)
+                    $arr = []; // 배열 초기화, 왜? 기존의 배열에 새로운 배열이 계속 추가 되기 때문 
+                    foreach ($row as  $key=> $value){
+                        // 초기화된 배열에, $key 값을 가지는 프로퍼티에
+                        // $value 값을 지정
+                        if($key=="id"){
+                            $value = "<a href='./".$tableName."/".$value."'>".$value."</a>";
+                        }
+                        $arr[$key] = $value; // 연상배열
+                    }
+                    // $rows []= $row; // 배열 추가 (2차원 배열)
+                    // $row 직접 넣지 않고, 가공해서 임시 배열인 $arr 사용
+                    $rows[] = $arr;
                 }
         
                 $content = $this->Html->table($rows);
@@ -173,6 +219,20 @@ class Select
         } else {
             $content = "선택된 테이블이 없습니다.";
         }
+
+        $totalPages = $total / $lines; // 페이지수
+
+        $content .= "<nav aria-label=\"Page navigation example\">
+        <ul class=\"pagination\">
+          <li class=\"page-item\"><a class=\"page-link\" href=\"#\">Previous</a></li>";
+
+          for($i=0,$j=1;$i<$totalPages;$i++, $j++){
+              //GET 방식으로 URI를 이용하여 값을 전달함
+            $content .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?start=$i\">$j</a></li>";
+          }
+          $content .= " <li class=\"page-item\"><a class=\"page-link\" href=\"#\">Next</a></li>
+        </ul>
+      </nav>";
         $body = file_get_contents("../Resource/select.html");
         $body = str_replace("{{content}}",$content, $body); // 데이터 치환
         
