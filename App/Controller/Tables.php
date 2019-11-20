@@ -29,7 +29,8 @@ class Tables
             // 새로운 테이블 생성
             $htmlForm = file_get_contents("../Resource/table_new.html");
             echo $htmlForm;
-        } else {
+        
+        }else{
             // 테이블 목록
             $this->list();
         }

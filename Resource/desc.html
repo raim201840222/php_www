@@ -57,6 +57,8 @@
                 {{content}}
 
                 <button type="button" class="btn btn-outline-primary" id="addField">컬럼 추가</button>
+                <button type="button" class="btn btn-outline-danger" id="removeTable">테이블 삭제</button>
+                <button type="button" class="btn btn-outline-warning" id="initTable">초기화</button>
             </div>        
         </div>
               
@@ -72,6 +74,18 @@
     addBtn.addEventListener("click",function(){
         alert("새로운 컬럼을 추가합니다.");
         document.location.href = "/TableInfo/{{tablename}}/new";
+    });
+
+    const removebtn = document.getElementById("removeTable");
+    removebtn.addEventListener("click",function(){
+      alert("테이블을 삭제합니다.");
+      document.location.href = "/TableInfo/{{tablename}}/delete";
+    });
+
+    const initbtn = document.getElementById("initTable");
+    initbtn.addEventListener("click",function(){
+      alert("테이블을 초기화 합니다.");
+      document.location.href = "/TableInfo/{{tablename}}/init";
     });
 </script>
 
