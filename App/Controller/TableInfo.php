@@ -1,6 +1,6 @@
 <?php
 namespace App\Controller;
-class TableInfo
+class TableInfo extends controller
 {
     private $db;
     // 생성자

@@ -1,6 +1,6 @@
 <?php
 namespace App\Controller;
-class Select
+class Select extends controller
 {
     private $db;
     private $HttpUri;

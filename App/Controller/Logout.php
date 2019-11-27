@@ -1,6 +1,6 @@
 <?php
 namespace App\Controller;
-class Logout
+class Logout extends controller
 {
     public function __construct()
     {
