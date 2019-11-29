@@ -2,13 +2,16 @@
 namespace App\Controller;
 class Databases extends controller
 {
-    private $db;
-    // 생성자
+    private $db; // 변수,
+    // 생성자 처리
     public function __construct($db)
     {
         // echo __CLASS__;
+        // 외부에서 넘겨오는 DB 정보를 내부에 저장한다.
+        // 내부에 저장한다 의미 ==> 객체 상태값 지정한다.
         $this->db = $db; 
     }
+
     /*
     * 처음 동작 구분 처리
     */
@@ -23,9 +26,12 @@ class Databases extends controller
                 // 새로운 데이터베이스를 추가
                 $query = "CREATE DATABASE ".$_POST['database'];
                 echo $query;
+
                 $result = $this->db->queryExecute($query);
+
                 // 페이지 이동
                 header("location:"."/databases");
+
             } else {
                 // 데이터베이스 입력해 주세요
                 // 새로운 데이터베이스 추가
@@ -58,6 +64,7 @@ class Databases extends controller
             ];
         }
         $content = $html->table($rows);
+        
         $body = file_get_contents("../Resource/database.html");
         $body = str_replace("{{content}}",$content, $body); // 데이터 치환
         echo $body;
